@@ -41,6 +41,8 @@ public class Fundraiser {
 
 	private String lastName;
 
+	private long withdrawnAmount;
+
 	@Lob
 	@Column(columnDefinition = "TEXT")
 	private String description;

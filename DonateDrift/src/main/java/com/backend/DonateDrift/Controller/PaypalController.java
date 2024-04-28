@@ -172,10 +172,11 @@ public class PaypalController {
             HttpServletRequest request) {
         try {
             String encodedName = URLEncoder.encode(name, StandardCharsets.UTF_8.toString());
-            // Ensure these URLs are leading to your frontend routes that handle the logic post-payment
-            String cancelUrl = "http://localhost:8080/payment/cancel" + fundraiserId;
-            String successUrl = "http://localhost:8080/payment/success/" + fundraiserId
-                    + "?donorName=" + encodedName + "&userId=" + userId;  // Ensure userId is appended
+            String cancelUrl = "http://localhost:8080/payment/cancel";  // Point directly to the frontend
+            String successUrl = "http://localhost:8080/payment/success/" + fundraiserId +
+                    "?amount=" + amount + "&donorName=" + encodedName + "&userId=" + userId; // Full frontend URL
+
+
 
             Payment payment = paypalService.createPayment(
                     Double.valueOf(amount),
@@ -203,6 +204,7 @@ public class PaypalController {
 
 
 
+
     @GetMapping("/payment/success/{fundraiserId}")
     public String paymentSuccess(
             @PathVariable Long fundraiserId,
@@ -212,6 +214,7 @@ public class PaypalController {
             @RequestParam("userId") Long userId,  // Directly use this parameter
             HttpServletRequest request) {
         try {
+
             Payment payment = paypalService.executePayment(paymentId, payerId);
             if ("approved".equals(payment.getState())) {
                 String name = URLDecoder.decode(encodedName, StandardCharsets.UTF_8.toString());

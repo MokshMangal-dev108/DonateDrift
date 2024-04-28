@@ -10,16 +10,20 @@ import com.backend.DonateDrift.exception.UserException;
 import com.backend.DonateDrift.repository.FundraiserRepository;
 import com.backend.DonateDrift.repository.UserRepository;
 
+import jakarta.persistence.metamodel.SingularAttribute;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.security.GeneralSecurityException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -174,6 +178,26 @@ public class FundraiserService{
         fundraiserRepository.save(fundraiser);
     }
 
-    
+    @Transactional
+    public void withdrawFunds(Fundraiser fundraiser, double amount) throws Exception {
+        if (fundraiser == null) {
+            throw new IllegalArgumentException("Fundraiser cannot be null");
+        }
+        double previousWithdrawl = fundraiser.getWithdrawnAmount();
+        double newWithdrawnAmount = fundraiser.getRaisedAmount() - previousWithdrawl;
+        double newRaisedAmount = fundraiser.getRaisedAmount()-previousWithdrawl;
+
+        if (newWithdrawnAmount > newRaisedAmount) {
+            throw new Exception("Withdrawal amount exceeds the raised amount");
+        }
+
+        fundraiser.setWithdrawnAmount((long) ((long) newWithdrawnAmount+previousWithdrawl));
+
+        // Optionally, you can adjust the raised amount if that is required by your business logic
+        // fundraiser.setRaisedAmount(fundraiser.getRaisedAmount() - amount);
+
+        fundraiserRepository.save(fundraiser);
+    }
+
 }
 

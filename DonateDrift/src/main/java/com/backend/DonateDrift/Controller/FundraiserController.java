@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 @RestController
 @RequestMapping("/api/fundraisers")
 public class FundraiserController {
@@ -167,28 +169,37 @@ public class FundraiserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    
-//    @GetMapping("/filter")
-//    public ResponseEntity<Page<Fundraiser>> getByCountry(@RequestParam("country") String country,@RequestParam("city") String city,@RequestParam("category") Category category,@RequestParam Integer pageNumber,
-//			@RequestParam Integer pageSize) {
-//
-//
-//	    if(country!=null && !country.equals("null")){
-//	    	Page<Fundraiser> p = fundraiserService.findByCountry(country,pageNumber,pageSize);
-//	    	return new ResponseEntity<>(p,HttpStatus.OK);
-//	    }
-//
-//	    if(city!=null && !city.equals("null")){
-//	    	Page<Fundraiser> p = fundraiserService.findByCity(city,pageNumber,pageSize);
-//	    	return new ResponseEntity<>(p,HttpStatus.OK);
-//	    }
-//
-//	    if(category!=null){
-//	    	Page<Fundraiser> p = fundraiserService.findByCategory(category,pageNumber,pageSize);
-//	    	return new ResponseEntity<>(p,HttpStatus.OK);
-//	    }
-//
-//	    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//    }
+    @PostMapping("/withdraw/{fundraiserId}")
+    public ResponseEntity<String> checkAndWithdrawFunds(@PathVariable Long fundraiserId) {
+        try {
+            Fundraiser fundraiser = fundraiserService.findFundraiserById(fundraiserId);
+            double raisedAmount = fundraiser.getRaisedAmount();
+            double requiredAmount = fundraiser.getRequiredAmount();
+
+            // Check if raised amount is less than 50% of the required amount
+            if (raisedAmount < requiredAmount * 0.5) {
+                return ResponseEntity.badRequest().body("Not enough balance at the moment.");
+            }
+
+            // If raised amount is 50% or more but less than 100%
+            if (raisedAmount >= requiredAmount * 0.5 && raisedAmount < requiredAmount) {
+                double amountToWithdraw = requiredAmount / 2; // Calculate 50% of the raised amount
+                fundraiserService.withdrawFunds(fundraiser, amountToWithdraw);
+                return ResponseEntity.ok("Half of the funds have been successfully withdrawn.");
+            }
+
+            // If raised amount is 100% or more
+            if (raisedAmount >= requiredAmount) {
+                fundraiserService.withdrawFunds(fundraiser, raisedAmount);  // Withdraw all the raised amount
+                return ResponseEntity.ok("All funds have been successfully withdrawn.");
+            }
+
+            return ResponseEntity.badRequest().body("Unexpected error during withdrawal.");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error processing the withdrawal: " + e.getMessage());
+        }
+    }
+
+
 
 }
