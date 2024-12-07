@@ -54,3 +54,8 @@ To run this project, ensure you have the following installed:
    spring.datasource.url=jdbc:mysql://localhost:3306/donate_drift
    spring.datasource.username=your_username
    spring.datasource.password=your_password
+3. Build and run the backend:
+   ```bash
+   mvn clean install
+   mvn spring-boot:run
+
