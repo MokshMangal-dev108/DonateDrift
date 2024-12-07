@@ -69,6 +69,24 @@ To run this project, ensure you have the following installed:
 3. Start the ReactJS development server:
    ```bash
    npm start
-
+   
+### 3. **Database Setup**
+1. Create a MySQL database:
+   ```sql
+   CREATE DATABASE donate_drift;
+2. Run the backend to allow Spring Boot to auto-create the required tables:
+   ```bash
+   mvn spring-boot:run
+   
+### 4. **PayPal Integration**
+1. Create a developer account at [PayPal Developer](https://developer.paypal.com/).
+2. Generate **Client ID** and **Secret** from the PayPal Developer Dashboard.
+3. Add the credentials to `application.properties` in the backend project:
+   ```properties
+   paypal.client.id=your_client_id
+   paypal.client.secret=your_client_secret
+   paypal.mode=sandbox
+Replace your_client_id and your_client_secret with the actual credentials from PayPal.
+The paypal.mode property can be set to sandbox for testing or live for production.
 
 
