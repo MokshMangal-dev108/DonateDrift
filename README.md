@@ -59,3 +59,16 @@ To run this project, ensure you have the following installed:
    mvn clean install
    mvn spring-boot:run
 
+### 2. **Frontend Setup**
+1. Navigate to the frontend directory:
+   ```bash
+   cd ../frontend
+2. Install dependencies:
+   ```bash
+   npm install
+3. Start the ReactJS development server:
+   ```bash
+   npm start
+
+
+
