@@ -89,4 +89,34 @@ To run this project, ensure you have the following installed:
 Replace your_client_id and your_client_secret with the actual credentials from PayPal.
 The paypal.mode property can be set to sandbox for testing or live for production.
 
+## **How to Use**
+1. **Launch the backend and frontend servers**:
+   - Ensure that the backend server is running:
+     ```bash
+     cd backend
+     mvn spring-boot:run
+     ```
+   - Start the frontend development server:
+     ```bash
+     cd ../frontend
+     npm start
+     ```
+
+2. **Open the frontend in your browser**:
+   - By default, the application will be available at [http://localhost:3000](http://localhost:3000).
+
+### **For Users**:
+- Sign up and log in to create fundraisers.
+- Monitor the progress of your fundraisers through the dashboard and view real-time updates.
+
+### **For Admins**:
+- Log in to the admin dashboard to manage and verify fundraisers to ensure authenticity and quality.
+
+## **Future Enhancements**
+- **Add support for additional payment gateways**: Integrate more payment options to provide users with flexibility in choosing how to donate.
+- **Implement advanced analytics for fundraisers**: Add features to analyze fundraising trends, donor behavior, and other insights to improve campaign strategies.
+- **Introduce AI-powered fraud detection**: Utilize machine learning algorithms to detect and prevent fraudulent activities on the platform.
+- **Expand real-time communication features**: Enhance the real-time feed to include live chat or notifications for better user engagement and interaction.
+
+
 
