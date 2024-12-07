@@ -49,3 +49,8 @@ To run this project, ensure you have the following installed:
    ```bash
    git clone https://github.com/your-username/donate-drift.git
    cd donate-drift/backend
+2. Update database configurations in application.properties:
+   ```bash
+   spring.datasource.url=jdbc:mysql://localhost:3306/donate_drift
+   spring.datasource.username=your_username
+   spring.datasource.password=your_password
